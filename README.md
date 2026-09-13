@@ -2,7 +2,7 @@
 
 # PretrainLab-X
 
-### A LLaMA-style pretraining stack built around long-run training, data quality, failure diagnostics, and auditable evaluation
+### Data-Centric Pretraining at Scale — Long-Run Training, Failure Diagnostics, and Auditable Generalization
 
 **336M long-run pretraining · ~500M processed token positions · FineWeb-Edu · fault injection · shared held-out evaluation · paired bootstrap · reproducibility audit**
 
