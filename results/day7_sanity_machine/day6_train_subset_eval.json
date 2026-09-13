@@ -1,0 +1,14 @@
+{
+  "precision": "bf16",
+  "scored_tokens": 10000000,
+  "nll": 3.0491799106445314,
+  "perplexity": 21.09803505192804,
+  "eval_seconds": 51.291439056396484,
+  "tokens_per_second": 194964.30952160843,
+  "peak_memory_mb": 5303.79736328125,
+  "path": "/root/autodl-tmp/pretrainlab_data/fineweb_fresh_500m/tokens.int32",
+  "dataset_file_sha256": "7d64cc914967823d3f8cae142c76ef24c4472a344b4b89a70cbb59eca18483dc",
+  "selected_tokens": 10000000,
+  "checkpoint_sha256": "3d1250567b0d3f311584b15a3ac1d73539cdd52b0baebfd7b290e1f7fdf21aca",
+  "selected_tokens_sha256": "53214170c405d3accd4b643950a82d0e71909430e9e8f4aef3029fd610ce6b13"
+}

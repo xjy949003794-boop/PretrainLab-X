@@ -1,0 +1,29 @@
+{
+  "kind": "day7_patch_canonical_hash_manifest",
+  "status": "complete",
+  "generated_at": "2026-09-13T14:06:07.150426+00:00",
+  "instance": "AutoDL B46",
+  "method": {
+    "commands": ["sha256sum", "openssl dgst -sha256", "Python hashlib.sha256"],
+    "all_hash_lengths_64": true,
+    "sha256sum_openssl_agree": true,
+    "python_crosscheck": true
+  },
+  "files": {
+    "day5_checkpoint": {
+      "path": "/root/day5_checkpoint_store/day5_336m_500m_step_15259.pt",
+      "size_bytes": 4033742349,
+      "sha256": "2c49925b61e46c533026c201dba02bfe845071e7c453964fcc33f508a24c36f3"
+    },
+    "day6_checkpoint": {
+      "path": "/root/day6_checkpoint_store/day6_336m_500m_fresh_step_15259.pt",
+      "size_bytes": 4033737695,
+      "sha256": "3d1250567b0d3f311584b15a3ac1d73539cdd52b0baebfd7b290e1f7fdf21aca"
+    },
+    "shared_heldout_tokens": {
+      "path": "/root/autodl-tmp/day6_6/heldout_processed/heldout_tokens.int32",
+      "size_bytes": 40004376,
+      "sha256": "3f0d22ee8933fc828a8876bf044ef7b40f96bf8cb0f98509a21df9214a6cc750"
+    }
+  }
+}

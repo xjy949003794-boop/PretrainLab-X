@@ -1,0 +1,68 @@
+{
+  "kind": "day6.6_shared_heldout_evaluation",
+  "status": "complete",
+  "retraining": false,
+  "model": {
+    "parameters": 336118784,
+    "dim": 1024,
+    "layers": 24,
+    "heads": 16,
+    "kv_heads": 4,
+    "context_length": 512,
+    "tokenizer": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "vocab_size": 32000,
+    "eos_id": 2
+  },
+  "heldout": {
+    "dataset": "HuggingFaceFW/fineweb-edu",
+    "config": "sample-10BT",
+    "source_shard": "013_00000.parquet",
+    "source_bytes": 540632672,
+    "target_tokens": 10000000,
+    "total_tokens": 10000094,
+    "documents_seen": 8681,
+    "documents_kept": 8666,
+    "token_sha256": "3f0d22ee8933fc828a8876bf044ef7b40f96bf8cb0f98509a21df9214a6cc750",
+    "day5_token_window": {"window_tokens": 64, "stride_tokens": 16, "day5_train_tokens_screened": 9900000, "rejected": 15},
+    "day6_source_shard_disjoint": true,
+    "semantic_zero_overlap_proven": false
+  },
+  "evaluation": {
+    "requested_tokens": 10000000,
+    "scored_tokens": 9992428,
+    "documents": 8666,
+    "batch_windows": 8,
+    "mode": "model.eval + torch.inference_mode; no backward or optimizer",
+    "day5": {
+      "checkpoint_step": 15259,
+      "checkpoint_sha256": "2c49925b61e46c533026c201dba02bfe845071e7c453964fcc33f508a24c36f3",
+      "weighted_nll": 8.424211409341236,
+      "perplexity": 4556.050502510992,
+      "elapsed_s": 62.649261713027954,
+      "tokens_per_sec": 159497.93703509946
+    },
+    "day6": {
+      "checkpoint_step": 15259,
+      "checkpoint_sha256": "3d1250567b0d3f311584b15a3ac1d73539cdd52b0baebfd7b290e1f7fdf21aca",
+      "weighted_nll": 3.039400292129431,
+      "perplexity": 20.892709954717585,
+      "elapsed_s": 62.41767764091492,
+      "tokens_per_sec": 160089.71140332756
+    }
+  },
+  "paired_bootstrap": {
+    "draws": 10000,
+    "seed": 1337,
+    "paired_documents": 8666,
+    "paired_tokens": 9992428,
+    "delta_nll_day5_minus_day6": 5.384811172211806,
+    "delta_nll_ci95": {"low": 5.3670995528947, "median": 5.384668897554921, "high": 5.402861453642085},
+    "delta_perplexity": 4535.157795256275,
+    "relative_ppl_reduction_day6": 0.995414293595448
+  },
+  "limitations": [
+    "Day5 used dataset-server API rows without retained shard/URL identifiers.",
+    "Exact Day5 document/URL reconstruction and semantic zero overlap are not proven.",
+    "The comparison is controlled held-out evidence, not a causal isolation of data freshness from training-history differences."
+  ]
+}

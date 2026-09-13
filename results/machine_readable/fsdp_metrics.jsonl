@@ -1,0 +1,2 @@
+{"step":1,"loss":10.5712890625,"tokens":1024,"precision":"bf16","world_size":1}
+{"step":16,"loss":7.652740478515625,"tokens":16384,"precision":"bf16","world_size":1}

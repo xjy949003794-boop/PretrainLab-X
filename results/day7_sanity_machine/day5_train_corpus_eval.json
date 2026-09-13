@@ -1,0 +1,14 @@
+{
+  "precision": "bf16",
+  "scored_tokens": 9899999,
+  "nll": 0.065023332899258,
+  "perplexity": 1.0671839245886967,
+  "eval_seconds": 50.56609916687012,
+  "tokens_per_second": 195783.32446269217,
+  "peak_memory_mb": 5326.79736328125,
+  "path": "/root/autodl-tmp/day4src_v2/pretrainlab_x/data/fineweb_10m/train_split.npy",
+  "dataset_file_sha256": "1b702f0f60cbfd1e19f727c23d04b46eb9e58a71bb3654475952947a3dd38457",
+  "selected_tokens": 9899999,
+  "checkpoint_sha256": "2c49925b61e46c533026c201dba02bfe845071e7c453964fcc33f508a24c36f3",
+  "selected_tokens_sha256": "57617b59acc97be3e9fa08dfaff3dc7e1efc10a7f17fe75fce634d283cb4e4eb"
+}

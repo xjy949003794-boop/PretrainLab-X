@@ -1,0 +1,41 @@
+[
+  {
+    "name": "300m",
+    "summary_path": "pretrainlab_x/report/day4_300m_benchmark_summary.json",
+    "parameters": 336118784,
+    "steps": 8,
+    "tokens": 16384,
+    "final_loss": 8.98883056640625,
+    "final_val_loss": 8.708099365234375,
+    "elapsed_s": 5.797656059265137,
+    "precision": "bf16",
+    "world_size": 1,
+    "records": 8
+  },
+  {
+    "name": "700m",
+    "summary_path": "pretrainlab_x/report/day4_700m_benchmark_summary.json",
+    "parameters": 653477120,
+    "steps": 4,
+    "tokens": 8192,
+    "final_loss": 9.158004760742188,
+    "final_val_loss": 9.078956604003906,
+    "elapsed_s": 6.640977382659912,
+    "precision": "bf16",
+    "world_size": 1,
+    "records": 4
+  },
+  {
+    "name": "fsdp",
+    "summary_path": "pretrainlab_x/report/fsdp_summary.json",
+    "parameters": 336118784,
+    "steps": 16,
+    "tokens": 16384,
+    "final_loss": 7.652740478515625,
+    "final_val_loss": null,
+    "elapsed_s": 5.2686684131622314,
+    "precision": "bf16",
+    "world_size": 1,
+    "records": 2
+  }
+]

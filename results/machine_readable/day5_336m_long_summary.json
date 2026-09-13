@@ -1,0 +1,78 @@
+{
+  "device": "cuda",
+  "cuda_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "param_count": 336118784,
+  "start_step": 0,
+  "end_step": 512,
+  "max_steps": 512,
+  "final_loss": 6.238929033279419,
+  "final_val_loss": 5.907875061035156,
+  "elapsed_s": 237.4519612789154,
+  "processed_tokens": 1048576,
+  "mean_tokens_per_sec": 4389.0570174007335,
+  "peak_memory_mb": 6787.96533203125,
+  "precision": "bf16",
+  "grad_accum_steps": 4,
+  "attention_backend": "sdpa_auto",
+  "data": {
+    "dataset_source": "HuggingFaceFW/fineweb-edu",
+    "dataset": "HuggingFaceFW/fineweb-edu",
+    "config": "sample-10BT",
+    "split": "train",
+    "source_mode": "api",
+    "real_data": true,
+    "documents_seen": 8479,
+    "documents_kept": 8478,
+    "duplicates_removed": 1,
+    "characters_kept": 39822471,
+    "tokens": 10000000,
+    "train_tokens": 9900000,
+    "val_tokens": 100000,
+    "tokenizer": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "vocab_size": 32000,
+    "eos_id": 2,
+    "seed": 1337,
+    "sha256_tokens": "53214170c405d3accd4b643950a82d0e71909430e9e8f4aef3029fd610ce6b13",
+    "filters": {
+      "min_chars": 200,
+      "max_chars": 200000,
+      "control_chars": "replaced",
+      "exact_text_dedup": true
+    },
+    "created_at_unix": 1789215302.9367218
+  },
+  "log_path": "logs/day5_336m_long_metrics.jsonl",
+  "training_health": {
+    "steps": 512,
+    "status": "warning",
+    "warning_steps": [
+      5,
+      7,
+      180,
+      232,
+      245,
+      423,
+      433,
+      443,
+      453,
+      463,
+      473
+    ],
+    "reasons": [
+      "gradient_spike",
+      "low_gpu_utilization"
+    ],
+    "max_grad_norm": 10.946956634521484,
+    "mean_tokens_per_sec": 4389.0570174007335,
+    "mean_gpu_utilization_pct": 32.552734375
+  },
+  "wandb": {
+    "id": "vk6yw6gm",
+    "name": "day5-336m-bounded-long",
+    "url": null,
+    "dir": "/root/autodl-tmp/day5src/wandb/offline-run-20260913_001732-vk6yw6gm/files",
+    "mode": "offline",
+    "project": "PretrainLab-X",
+    "entity": "xjy949003794-peking-university"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "kind": "day7_hash_audit_documentation_patch",
+  "status": "complete",
+  "scope": "hash references and audit documentation only",
+  "weights_or_metrics_modified": false,
+  "replacements": [
+    {
+      "field": "heldout.token_sha256",
+      "old": "3fd022ee8933fc828a8876bf044ef7b40f96bf8cb0f98509a21df9214a6c750",
+      "new": "3f0d22ee8933fc828a8876bf044ef7b40f96bf8cb0f98509a21df9214a6cc750",
+      "reason": "early report transcription had a missing character and did not match the 64-character file hash"
+    },
+    {
+      "field": "day6.checkpoint_sha256",
+      "old": "3d1250567b0d3f311584b15a3acd173539cdd52b0baebfd7b290e1f7fdf21aca",
+      "new": "3d1250567b0d3f311584b15a3ac1d73539cdd52b0baebfd7b290e1f7fdf21aca",
+      "reason": "early report transcription transposed adjacent characters"
+    }
+  ],
+  "backups": [
+    "DAY6_6_SHARED_EVAL_RESULT.pre_day7_patch.md",
+    "DAY6_6_SHARED_EVAL_RESULT_CN.pre_day7_patch.md",
+    "report/day6_6_summary.pre_day7_patch.json",
+    "DAY7_SANITY_CHECK_RESULT_CN.pre_day7_patch.md",
+    "evaluation/day7_sanity.pre_day7_patch.py"
+  ],
+  "verification": "sha256sum + OpenSSL + Python hashlib; JSON parse and source scan passed"
+}

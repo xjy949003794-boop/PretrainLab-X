@@ -1,0 +1,13 @@
+{
+  "kind": "day7_patch_hash_crosscheck",
+  "status": "pass",
+  "all_hash_lengths_64": true,
+  "sha256sum_openssl_agree": true,
+  "python_matches_sha256sum": true,
+  "files_checked": [
+    "day5_checkpoint",
+    "day6_checkpoint",
+    "shared_heldout_tokens"
+  ],
+  "source": "AutoDL B46 /root/autodl-tmp/day7_patch/reports/HASH_CROSSCHECK.json"
+}

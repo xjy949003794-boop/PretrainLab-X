@@ -1,0 +1,8 @@
+{"step":1,"loss":10.62237060546875,"tokens":2048,"precision":"bf16"}
+{"step":2,"loss":10.33746337890625,"tokens":4096,"precision":"bf16"}
+{"step":3,"loss":9.473304748535156,"tokens":6144,"precision":"bf16"}
+{"step":4,"loss":9.303829193115234,"tokens":8192,"precision":"bf16"}
+{"step":5,"loss":9.062606811523438,"tokens":10240,"precision":"bf16"}
+{"step":6,"loss":8.987831115722656,"tokens":12288,"precision":"bf16"}
+{"step":7,"loss":8.900227783203125,"tokens":14336,"precision":"bf16"}
+{"step":8,"loss":8.98883056640625,"tokens":16384,"precision":"bf16"}

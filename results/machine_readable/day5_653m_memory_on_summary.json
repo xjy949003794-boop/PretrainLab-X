@@ -1,0 +1,68 @@
+{
+  "device": "cuda",
+  "cuda_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "param_count": 653477120,
+  "start_step": 0,
+  "end_step": 3,
+  "max_steps": 3,
+  "final_loss": 9.834381103515625,
+  "final_val_loss": 9.32843017578125,
+  "elapsed_s": 7.499380111694336,
+  "processed_tokens": 1536,
+  "mean_tokens_per_sec": 552.7356605951052,
+  "peak_memory_mb": 12795.40771484375,
+  "precision": "bf16",
+  "grad_accum_steps": 1,
+  "attention_backend": "sdpa_auto",
+  "data": {
+    "dataset_source": "HuggingFaceFW/fineweb-edu",
+    "dataset": "HuggingFaceFW/fineweb-edu",
+    "config": "sample-10BT",
+    "split": "train",
+    "source_mode": "api",
+    "real_data": true,
+    "documents_seen": 8479,
+    "documents_kept": 8478,
+    "duplicates_removed": 1,
+    "characters_kept": 39822471,
+    "tokens": 10000000,
+    "train_tokens": 9900000,
+    "val_tokens": 100000,
+    "tokenizer": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "vocab_size": 32000,
+    "eos_id": 2,
+    "seed": 1337,
+    "sha256_tokens": "53214170c405d3accd4b643950a82d0e71909430e9e8f4aef3029fd610ce6b13",
+    "filters": {
+      "min_chars": 200,
+      "max_chars": 200000,
+      "control_chars": "replaced",
+      "exact_text_dedup": true
+    },
+    "created_at_unix": 1789215302.9367218
+  },
+  "log_path": "logs/day5_653m_memory_on_metrics.jsonl",
+  "training_health": {
+    "steps": 3,
+    "status": "warning",
+    "warning_steps": [
+      1,
+      2
+    ],
+    "reasons": [
+      "gradient_spike"
+    ],
+    "max_grad_norm": 37.29115295410156,
+    "mean_tokens_per_sec": 552.7356605951052,
+    "mean_gpu_utilization_pct": 28.666666666666668
+  },
+  "wandb": {
+    "id": "daxxpskp",
+    "name": "day5-653m-memory-on",
+    "url": null,
+    "dir": "/root/autodl-tmp/day5src/wandb/offline-run-20260913_002238-daxxpskp/files",
+    "mode": "offline",
+    "project": "PretrainLab-X",
+    "entity": "xjy949003794-peking-university"
+  }
+}

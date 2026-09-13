@@ -1,0 +1,208 @@
+{
+  "kind": "day7_sanity_check",
+  "status": "complete",
+  "device": "cuda",
+  "cuda_name": "NVIDIA RTX PRO 6000 Blackwell Server Edition",
+  "no_training": true,
+  "checkpoint_integrity": {
+    "day5": {
+      "path": "/root/day5_checkpoint_store/day5_336m_500m_step_15259.pt",
+      "sha256": "2c49925b61e46c533026c201dba02bfe845071e7c453964fcc33f508a24c36f3",
+      "sha256_matches": true,
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "parameter_count": 336118784,
+      "step": 15259,
+      "model_config": {
+        "vocab_size": 32000,
+        "dim": 1024,
+        "n_layers": 24,
+        "n_heads": 16,
+        "n_kv_heads": 4,
+        "max_seq_len": 512,
+        "multiple_of": 256,
+        "dropout": 0.0,
+        "rope_base": 10000.0,
+        "tie_embeddings": false,
+        "gradient_checkpointing": true
+      }
+    },
+    "day6": {
+      "path": "/root/day6_checkpoint_store/day6_336m_500m_fresh_step_15259.pt",
+      "sha256": "3d1250567b0d3f311584b15a3ac1d73539cdd52b0baebfd7b290e1f7fdf21aca",
+      "sha256_matches": true,
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "parameter_count": 336118784,
+      "step": 15259,
+      "model_config": {
+        "vocab_size": 32000,
+        "dim": 1024,
+        "n_layers": 24,
+        "n_heads": 16,
+        "n_kv_heads": 4,
+        "max_seq_len": 512,
+        "multiple_of": 256,
+        "dropout": 0.0,
+        "rope_base": 10000.0,
+        "tie_embeddings": false,
+        "gradient_checkpointing": true
+      }
+    }
+  },
+  "configuration_consistency": {
+    "parameter_count": 336118784,
+    "dim": 1024,
+    "layers": 24,
+    "heads": 16,
+    "kv_heads": 4,
+    "seq_len": 512,
+    "tokenizer": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+    "vocab_size": 32000,
+    "eos_id": 2,
+    "dtype": "checkpoint weights fp32 with bf16 autocast evaluation",
+    "day5_day6_model_config_equal": true
+  },
+  "heldout_integrity": {
+    "path": "/root/autodl-tmp/day6_6/heldout_processed/heldout_tokens.int32",
+    "sha256": "3f0d22ee8933fc828a8876bf044ef7b40f96bf8cb0f9f8509a21df9214a6c750",
+    "expected_sha256": "3f0d22ee8933fc828a8876bf044ef7b40f96bf8cb0f9f8509a21df9214a6c750",
+    "expected_sha256_source": "heldout_manifest.json",
+    "plan_literal": "3fd022ee8933fc828a8876bf044ef7b40f96bf8cb0f98509a21df9214a6c750",
+    "plan_literal_valid_length": false,
+    "sha256_matches": true,
+    "index_path": "/root/autodl-tmp/day6_6/heldout_processed/heldout_doc_index.jsonl",
+    "scoreable_ranges_10m": 8666
+  },
+  "random_baseline": {
+    "precision": "bf16",
+    "scored_tokens": 500000,
+    "nll": 10.57482137109375,
+    "perplexity": 39136.913155554816,
+    "eval_seconds": 3.3845505714416504,
+    "tokens_per_second": 147730.10166222006,
+    "peak_memory_mb": 2614.41455078125,
+    "seed": 20260913,
+    "parameter_count": 336118784,
+    "model_config": {
+      "vocab_size": 32000,
+      "dim": 1024,
+      "n_layers": 24,
+      "n_heads": 16,
+      "n_kv_heads": 4,
+      "max_seq_len": 512,
+      "multiple_of": 256,
+      "dropout": 0.0,
+      "rope_base": 10000.0,
+      "tie_embeddings": false,
+      "gradient_checkpointing": false
+    }
+  },
+  "shared_heldout": {
+    "day5": {
+      "precision": "bf16",
+      "scored_tokens": 9992428,
+      "nll": 8.424211414250058,
+      "perplexity": 4556.050524875833,
+      "eval_seconds": 62.45419406890869,
+      "tokens_per_second": 159996.1083314097,
+      "peak_memory_mb": 3970.60595703125,
+      "checkpoint_sha256": "2c49925b61e46c533026c201dba02bfe845071e7c453964fcc33f508a24c36f3",
+      "checkpoint_step": 15259
+    },
+    "day6": {
+      "precision": "bf16",
+      "scored_tokens": 9992428,
+      "nll": 3.0394002915912224,
+      "perplexity": 20.89270994347295,
+      "eval_seconds": 62.92980480194092,
+      "tokens_per_second": 158786.89011429777,
+      "peak_memory_mb": 3970.60595703125,
+      "checkpoint_sha256": "3d1250567b0d3f311584b15a3ac1d73539cdd52b0baebfd7b290e1f7fdf21aca",
+      "checkpoint_step": 15259
+    }
+  },
+  "day5_train_corpus_eval": {
+    "precision": "bf16",
+    "scored_tokens": 9899999,
+    "nll": 0.065023332899258,
+    "perplexity": 1.0671839245886967,
+    "eval_seconds": 50.56609916687012,
+    "tokens_per_second": 195783.32446269217,
+    "peak_memory_mb": 5326.79736328125,
+    "path": "/root/autodl-tmp/day4src_v2/pretrainlab_x/data/fineweb_10m/train_split.npy",
+    "dataset_file_sha256": "1b702f0f60cbfd1e19f727c23d04b46eb9e58a71bb3654475952947a3dd38457",
+    "selected_tokens": 9899999,
+    "checkpoint_sha256": "2c49925b61e46c533026c201dba02bfe845071e7c453964fcc33f508a24c36f3",
+    "selected_tokens_sha256": "57617b59acc97be3e9fa08dfaff3dc7e1efc10a7f17fe75fce634d283cb4e4eb"
+  },
+  "day6_train_subset_eval": {
+    "precision": "bf16",
+    "scored_tokens": 10000000,
+    "nll": 3.0491799106445314,
+    "perplexity": 21.09803505192804,
+    "eval_seconds": 51.291439056396484,
+    "tokens_per_second": 194964.30952160843,
+    "peak_memory_mb": 5303.79736328125,
+    "path": "/root/autodl-tmp/pretrainlab_data/fineweb_fresh_500m/tokens.int32",
+    "dataset_file_sha256": "7d64cc914967823d3f8cae142c76ef24c4472a344b4b89a70cbb59eca18483dc",
+    "selected_tokens": 10000000,
+    "checkpoint_sha256": "3d1250567b0d3f311584b15a3ac1d73539cdd52b0baebfd7b290e1f7fdf21aca",
+    "selected_tokens_sha256": "53214170c405d3accd4b643950a82d0e71909430e9e8f4aef3029fd610ce6b13"
+  },
+  "precision_crosscheck": {
+    "sample_tokens": 100000,
+    "day5": {
+      "bf16": {
+        "precision": "bf16",
+        "scored_tokens": 100000,
+        "nll": 8.324128438110352,
+        "perplexity": 4122.1429396706235,
+        "eval_seconds": 0.6244816780090332,
+        "tokens_per_second": 160132.80056321123,
+        "peak_memory_mb": 3970.60595703125
+      },
+      "fp32": {
+        "precision": "fp32",
+        "scored_tokens": 100000,
+        "nll": 8.32396173095703,
+        "perplexity": 4121.45580623219,
+        "eval_seconds": 1.7357401847839355,
+        "tokens_per_second": 57612.30907519029,
+        "peak_memory_mb": 3752.58984375
+      },
+      "nll_delta_fp32_minus_bf16": -0.0001667071533208997
+    },
+    "day6": {
+      "bf16": {
+        "precision": "bf16",
+        "scored_tokens": 100000,
+        "nll": 2.965548766784668,
+        "perplexity": 19.40534933125182,
+        "eval_seconds": 0.6260900497436523,
+        "tokens_per_second": 159721.43310845495,
+        "peak_memory_mb": 3970.60595703125
+      },
+      "fp32": {
+        "precision": "fp32",
+        "scored_tokens": 100000,
+        "nll": 2.965439006347656,
+        "perplexity": 19.40321950851613,
+        "eval_seconds": 1.667226791381836,
+        "tokens_per_second": 59979.84228475461,
+        "peak_memory_mb": 3752.58984375
+      },
+      "nll_delta_fp32_minus_bf16": -0.00010976043701171889
+    },
+    "ranking_preserved": true
+  },
+  "derived": {
+    "day5_memorization_gap": 8.3591880813508,
+    "day6_generalization_gap": -0.009779619053309041
+  },
+  "elapsed_seconds": 287.3784279823303,
+  "limitations": [
+    "Day5 API-source shard/URL manifest was not retained, so semantic zero overlap is not proven.",
+    "Day7 verifies integrity and numerical robustness; it does not isolate a causal effect of freshness alone."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "precision": "bf16",
+  "scored_tokens": 500000,
+  "nll": 10.57482137109375,
+  "perplexity": 39136.913155554816,
+  "eval_seconds": 3.3845505714416504,
+  "tokens_per_second": 147730.10166222006,
+  "peak_memory_mb": 2614.41455078125,
+  "seed": 20260913,
+  "parameter_count": 336118784,
+  "model_config": {
+    "vocab_size": 32000,
+    "dim": 1024,
+    "n_layers": 24,
+    "n_heads": 16,
+    "n_kv_heads": 4,
+    "max_seq_len": 512,
+    "multiple_of": 256,
+    "dropout": 0.0,
+    "rope_base": 10000.0,
+    "tie_embeddings": false,
+    "gradient_checkpointing": false
+  }
+}

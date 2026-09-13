@@ -1,0 +1,12 @@
+{
+  "parameters": 336118784,
+  "world_size": 1,
+  "local_rank": 0,
+  "steps": 16,
+  "first_loss": 10.5712890625,
+  "last_loss": 7.652740478515625,
+  "elapsed_s": 5.2686684131622314,
+  "precision": "bf16",
+  "sharding": "FullyShardedDataParallel",
+  "log_path": "fsdp_metrics.jsonl"
+}

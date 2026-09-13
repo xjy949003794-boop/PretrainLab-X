@@ -1,0 +1,4 @@
+{"step":1,"loss":10.75970458984375,"tokens":2048,"precision":"bf16"}
+{"step":2,"loss":10.029464721679688,"tokens":4096,"precision":"bf16"}
+{"step":3,"loss":9.408027648925781,"tokens":6144,"precision":"bf16"}
+{"step":4,"loss":9.158004760742188,"tokens":8192,"precision":"bf16"}

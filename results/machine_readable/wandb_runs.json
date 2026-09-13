@@ -1,0 +1,32 @@
+[
+  {
+    "name": "day5-336m-bounded-long",
+    "id": "vk6yw6gm",
+    "mode": "offline",
+    "dir": "wandb/offline-run-20260913_001732-vk6yw6gm"
+  },
+  {
+    "name": "day5-653m-memory-off",
+    "id": "7jhs2cxf",
+    "mode": "offline",
+    "dir": "wandb/offline-run-20260913_002221-7jhs2cxf"
+  },
+  {
+    "name": "day5-653m-memory-on",
+    "id": "daxxpskp",
+    "mode": "offline",
+    "dir": "wandb/offline-run-20260913_002238-daxxpskp"
+  },
+  {
+    "name": "day5-336m-preflight",
+    "id": "h62mjhhy",
+    "mode": "offline",
+    "dir": "wandb/offline-run-20260913_001703-h62mjhhy"
+  },
+  {
+    "name": "day5-336m-500m",
+    "id": "c7kbwgbc",
+    "mode": "offline",
+    "dir": "wandb/offline-run-20260913_010008-c7kbwgbc/files"
+  }
+]

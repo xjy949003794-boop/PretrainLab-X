@@ -1,0 +1,46 @@
+{
+  "sample_tokens": 100000,
+  "day5": {
+    "bf16": {
+      "precision": "bf16",
+      "scored_tokens": 100000,
+      "nll": 8.324128438110352,
+      "perplexity": 4122.1429396706235,
+      "eval_seconds": 0.6244816780090332,
+      "tokens_per_second": 160132.80056321123,
+      "peak_memory_mb": 3970.60595703125
+    },
+    "fp32": {
+      "precision": "fp32",
+      "scored_tokens": 100000,
+      "nll": 8.32396173095703,
+      "perplexity": 4121.45580623219,
+      "eval_seconds": 1.7357401847839355,
+      "tokens_per_second": 57612.30907519029,
+      "peak_memory_mb": 3752.58984375
+    },
+    "nll_delta_fp32_minus_bf16": -0.0001667071533208997
+  },
+  "day6": {
+    "bf16": {
+      "precision": "bf16",
+      "scored_tokens": 100000,
+      "nll": 2.965548766784668,
+      "perplexity": 19.40534933125182,
+      "eval_seconds": 0.6260900497436523,
+      "tokens_per_second": 159721.43310845495,
+      "peak_memory_mb": 3970.60595703125
+    },
+    "fp32": {
+      "precision": "fp32",
+      "scored_tokens": 100000,
+      "nll": 2.965439006347656,
+      "perplexity": 19.40321950851613,
+      "eval_seconds": 1.667226791381836,
+      "tokens_per_second": 59979.84228475461,
+      "peak_memory_mb": 3752.58984375
+    },
+    "nll_delta_fp32_minus_bf16": -0.00010976043701171889
+  },
+  "ranking_preserved": true
+}
