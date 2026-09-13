@@ -2,7 +2,7 @@
 
 # PretrainLab-X
 
-### Data-Centric Pretraining at Scale — Long-Run Training, Failure Diagnostics, and Auditable Generalization
+### An End-to-End Foundation-Model Pretraining System for Data-Centric Scaling, Failure-Aware Training, and Auditable Generalization
 
 **336M long-run pretraining · ~500M processed token positions · FineWeb-Edu · fault injection · shared held-out evaluation · paired bootstrap · reproducibility audit**
 
