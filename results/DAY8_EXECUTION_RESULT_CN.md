@@ -54,7 +54,7 @@ scripts/verify_release.py
 GitHub 私有仓库已创建：
 
 ```text
-https://github.com/xjy949003794-boop/PretrainLab-X
+https://github.com/junyi-xiong/PretrainLab-X
 ```
 
 当前已核对仓库可见性为 **Private（私有）**。代码推送尚未完成：本机没有可用的 GitHub 命令行凭据，且浏览器上传控件拒绝自动注入本地目录，因此不能把“代码已上传”写成既成事实。发布包本身已完整保存在本机；待用户在已登录环境中执行一次 `git push -u origin main` 或手动上传后，仓库即可获得完整源码。
