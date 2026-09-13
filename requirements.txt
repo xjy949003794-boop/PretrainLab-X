@@ -1,0 +1,6 @@
+numpy>=1.24
+PyYAML>=6.0
+torch>=2.1
+matplotlib>=3.7
+# Optional: only if you want to create offline W&B runs.
+# wandb>=0.23

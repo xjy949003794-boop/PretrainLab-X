@@ -1,0 +1,19 @@
+Day7 Patch — final hash verification
+=====================================
+Status: PASS
+Instance: AutoDL B46
+Scope: read-only audit and documentation repair; no training or evaluation rerun
+
+Canonical SHA-256 values (all length 64):
+Day5 checkpoint : 2c49925b61e46c533026c201dba02bfe845071e7c453964fcc33f508a24c36f3
+Day6 checkpoint : 3d1250567b0d3f311584b15a3ac1d73539cdd52b0baebfd7b290e1f7fdf21aca
+Held-out tokens : 3f0d22ee8933fc828a8876bf044ef7b40f96bf8cb0f98509a21df9214a6cc750
+
+Cross-checks:
+- sha256sum and OpenSSL agree for all three files: true
+- Python hashlib agrees for all three files: true
+- all hash strings have length 64: true
+- current formal reports and machine-readable summary use canonical values: true
+- model weights, metrics, training history, and evaluation outputs changed: false
+
+Early transcription errors were preserved in explicit .pre_day7_patch backups.

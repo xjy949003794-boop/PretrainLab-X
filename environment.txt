@@ -1,0 +1,13 @@
+Environment used for the checked-in artifacts
+---------------------------------------------
+Host-side packaging date: 2026-09-14 (Asia/Shanghai)
+Training GPU recorded in reports: NVIDIA RTX PRO 6000 Blackwell Server Edition
+Training software recorded in reports: PyTorch 2.8.0+cu128, CUDA 12.8
+Training precision: BF16 autocast on CUDA
+Attention backend: PyTorch SDPA, recorded as sdpa_auto
+Tokenizer: TinyLlama/TinyLlama-1.1B-Chat-v1.0 (vocab 32,000; EOS id 2)
+Offline W&B SDK recorded in a run environment file: 0.23.0
+
+The public package does not claim that every host dependency is byte-for-byte
+identical. Use `pip freeze` and `nvidia-smi` on a reproduction host and save
+the output beside the run summary.

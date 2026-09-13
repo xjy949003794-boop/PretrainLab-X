@@ -1,0 +1,41 @@
+seed: 1337
+data_dir: data/fineweb_10m
+output_dir: .
+max_seq_len: 512
+batch_size: 1
+gradient_accumulation_steps: 1
+max_steps: 3
+warmup_steps: 1
+learning_rate: 0.0003
+min_learning_rate: 0.00003
+weight_decay: 0.1
+grad_clip: 1.0
+precision: bf16
+eval_interval: 3
+eval_batches: 1
+save_interval: 3
+log_interval: 1
+dim: 1280
+n_layers: 32
+n_heads: 20
+n_kv_heads: 5
+multiple_of: 256
+dropout: 0.0
+rope_base: 10000.0
+tie_embeddings: false
+gradient_checkpointing: false
+adaptive_monitor: true
+log_name: day5_653m_memory_off_metrics.jsonl
+checkpoint_prefix: day5_653m_memory_off
+summary_name: day5_653m_memory_off_summary.json
+wandb_enabled: true
+wandb_mode: offline
+wandb_project: PretrainLab-X
+wandb_entity: xjy949003794-peking-university
+wandb_run_name: day5-653m-memory-off
+wandb_group: day5-memory-tradeoff
+wandb_job_type: pretraining
+wandb_tags:
+  - day5
+  - 653m
+  - activation-checkpointing-off

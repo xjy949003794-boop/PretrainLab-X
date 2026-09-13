@@ -1,0 +1,46 @@
+# Cost-bounded Day 5 run: real training, but deliberately below the written
+# 500M-token ambition. The strict 3B-token target remains in 300m_train.yaml.
+seed: 1337
+data_dir: data/fineweb_10m
+output_dir: .
+max_seq_len: 512
+batch_size: 1
+gradient_accumulation_steps: 4
+max_steps: 512
+warmup_steps: 32
+learning_rate: 0.0003
+min_learning_rate: 0.00003
+weight_decay: 0.1
+grad_clip: 1.0
+precision: bf16
+eval_interval: 128
+eval_batches: 1
+save_interval: 128
+log_interval: 16
+dim: 1024
+n_layers: 24
+n_heads: 16
+n_kv_heads: 4
+multiple_of: 256
+dropout: 0.0
+rope_base: 10000.0
+tie_embeddings: false
+gradient_checkpointing: true
+adaptive_monitor: true
+health_warmup_records: 5
+health_max_grad_norm: 10.0
+log_name: day5_336m_long_metrics.jsonl
+checkpoint_prefix: day5_336m_long
+summary_name: day5_336m_long_summary.json
+wandb_enabled: true
+wandb_mode: offline
+wandb_project: PretrainLab-X
+wandb_entity: xjy949003794-peking-university
+wandb_run_name: day5-336m-bounded-long
+wandb_group: day5-final-polish
+wandb_job_type: pretraining
+wandb_tags:
+  - day5
+  - 336m
+  - fineweb-edu
+  - bounded
