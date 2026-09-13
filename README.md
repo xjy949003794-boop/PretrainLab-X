@@ -1,3 +1,6 @@
+<p align="center">
+  <b>English</b> | <a href="./README_CN.md">简体中文</a>
+</p>
 # PretrainLab-X
 
 ## A production-shaped mini foundation-model pretraining stack
