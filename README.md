@@ -40,13 +40,19 @@
 
 ## Project arc
 
-PretrainLab-X was built to exercise the full pretraining path rather than a single model script: architecture, data preparation, optimizer state, checkpoint recovery, telemetry, long-run training, held-out evaluation, statistical validation, and artifact audit.
+PretrainLab-X covers the core path of a foundation-model pretraining project: **model architecture, data pipelines, training infrastructure, stability diagnostics, checkpoint recovery, scale-up validation, long-running pretraining, controlled evaluation, statistical testing, and artifact auditing**. The stack was progressively scaled from small validation runs to 336M / 653M configurations, culminating in two 336M runs of 15,259 optimizer steps and roughly 500M processed token positions each.
 
-The most useful result came from a failure in the first 336M long run. That run processed roughly 500M token positions, but the underlying training slice contained only 9.9M tokens and was therefore replayed many times. Instead of treating the run as a finished result, the data pipeline was rebuilt around a ~505M-token FineWeb-Edu corpus and the same 336M model was trained again at essentially the same processed-token budget without dataset replay.
+The first 336M run exposed a more important issue than whether training loss continued to decrease: **roughly 500M token positions were being consumed from an underlying training slice of only 9.9M tokens.** The corpus was therefore being replayed many times. That observation shifted the next experiment toward data coverage. The pipeline was rebuilt around approximately **505M FineWeb-Edu training tokens**, and the 336M run was repeated at essentially the same model scale and processed-token budget without dataset replay.
 
-The two frozen checkpoints were then compared under a shared held-out protocol. The unexpectedly large gap was not accepted at face value: it triggered a second round of checks covering checkpoint integrity, model-configuration equality, a random-init baseline, train-vs-held-out behavior, BF16/FP32 numerical agreement, overlap screening, paired bootstrap, and a final hash audit.
+The two resulting checkpoints were then evaluated under a common protocol rather than compared through their training losses. Model configuration, tokenizer, context length, evaluation code, and held-out corpus were fixed across both runs. Next-token evaluation covered **8,666 documents and 9,992,428 scored tokens**, followed by **10,000 paired bootstrap resamples**. The resulting weighted NLL was **8.424 for Day 5 and 3.039 for Day 6**.
 
-In short:
+That gap became the next engineering question: whether it reflected generalization behavior or an artifact of checkpoint integrity, evaluation code, numerical precision, data overlap, or training-set memorization. The project therefore added strict checkpoint loading, configuration matching, a random-init baseline, Day 5 training-corpus evaluation, Day 6 training-subset evaluation, BF16 / FP32 cross-checks, held-out overlap screening, and multi-implementation SHA-256 verification.
+
+The result is not just a training run, but an end-to-end experimental chain:
+
+**train → diagnose → redesign → rerun → evaluate → challenge the result → audit the evidence**
+
+The project progression can be summarized as:
 
 ```text
 model + trainer
