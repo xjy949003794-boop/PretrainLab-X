@@ -2,7 +2,7 @@
 
 # PretrainLab-X
 
-### 一套面向真实预训练流程的 LLaMA 风格训练系统：数据、训练稳定性、长程训练、泛化评估与可复现审计
+### 面向数据中心扩展、故障感知训练与可审计泛化的端到端基础模型预训练系统
 
 **336M 长程预训练 · 约 5 亿 processed token positions · FineWeb-Edu · 故障注入 · 共享留出评估 · 配对 Bootstrap · 可复现审计**
 
