@@ -2,9 +2,9 @@
 
 # PretrainLab-X
 
-### A production-style LLaMA pretraining stack with controlled data experiments and auditable evaluation
+### A LLaMA-style pretraining stack built around long-run training, data quality, failure diagnostics, and auditable evaluation
 
-**336M long-run pretraining · ~500M processed token positions · FineWeb-Edu · fault injection · shared held-out evaluation · reproducibility audit**
+**336M long-run pretraining · ~500M processed token positions · FineWeb-Edu · fault injection · shared held-out evaluation · paired bootstrap · reproducibility audit**
 
 ![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-2.8-EE4C2C?logo=pytorch&logoColor=white)
@@ -24,8 +24,8 @@
 | | |
 |---|---:|
 | **Completed long-run model** | 336,118,784 parameters |
-| **Largest model path validated** | 653,477,120 parameters |
-| **Long-run training budget** | 15,259 optimizer steps |
+| **Largest validated model path** | 653,477,120 parameters |
+| **Long-run budget** | 15,259 optimizer steps |
 | **Processed token positions** | 500,006,912 |
 | **Non-replayed training corpus** | 505,007,770 train tokens |
 | **Shared held-out evaluation** | 8,666 documents / 9,992,428 scored tokens |
@@ -48,10 +48,6 @@ The two resulting checkpoints were then evaluated under a common protocol rather
 
 That gap became the next engineering question: whether it reflected generalization behavior or an artifact of checkpoint integrity, evaluation code, numerical precision, data overlap, or training-set memorization. The project therefore added strict checkpoint loading, configuration matching, a random-init baseline, Day 5 training-corpus evaluation, Day 6 training-subset evaluation, BF16 / FP32 cross-checks, held-out overlap screening, and multi-implementation SHA-256 verification.
 
-The result is not just a training run, but an end-to-end experimental chain:
-
-**train → diagnose → redesign → rerun → evaluate → challenge the result → audit the evidence**
-
 The project progression can be summarized as:
 
 ```text
@@ -69,19 +65,19 @@ data-replay problem identified
       ↓
 336M long run repeated at matched token budget
       ↓
-shared held-out exam
+shared held-out evaluation
       ↓
-bootstrap + sanity checks + audit
+paired bootstrap + sanity checks + artifact audit
 ```
 
-## System implementation
+## System
 
 ### Model
-- Decoder-only Transformer with **RMSNorm**, **RoPE**, **SwiGLU**, and **grouped-query attention (GQA)**.
-- 16 query heads / 4 KV heads in the main 336M configuration.
+- Decoder-only Transformer.
+- **RMSNorm, RoPE, SwiGLU, GQA**.
+- Main 336M configuration: `dim=1024`, `24` layers, `16` query heads, `4` KV heads, context length `512`.
 - PyTorch scaled-dot-product attention through the `sdpa_auto` backend.
 - Activation checkpointing support for larger configurations.
-- 336M main configuration: `dim=1024`, `24` layers, `16` query heads, `4` KV heads, context length `512`.
 
 ### Training engine
 - **BF16** mixed-precision training.
@@ -89,16 +85,18 @@ bootstrap + sanity checks + audit
 - Warmup + cosine learning-rate schedule.
 - Stateful checkpoints containing model, optimizer, scheduler, and RNG state.
 - Checkpoint resume validated from step 400 → 500.
-- JSONL telemetry for loss, learning rate, pre-clip gradient norm, GPU memory/utilization, and throughput.
-- Observability is separated from intervention: the monitor records and flags abnormal behavior but does not silently rewrite LR, batch size, or optimizer state.
+- JSONL telemetry for loss, learning rate, pre-clip gradient norm, GPU memory, GPU utilization, and throughput.
+- Monitoring is kept separate from intervention: diagnostics record and flag behavior without silently rewriting LR, batch size, or optimizer state.
 
-### Data and evaluation
-- FineWeb-Edu ingestion, filtering, exact-text deduplication, document-level splitting, tokenization, and packing.
-- Tokenizer provenance and token-file SHA-256.
+### Evaluation stack
 - Shared held-out next-token evaluation for frozen checkpoints.
 - Token-weighted NLL and perplexity.
 - Document-level paired bootstrap.
-- Random-init baseline, precision cross-check, overlap audit, and checkpoint/configuration integrity checks.
+- Random-initialization baseline.
+- BF16 / FP32 numerical cross-check.
+- Checkpoint/configuration equality checks.
+- Token-window overlap screening.
+- SHA-256 provenance and final artifact audit.
 
 ```mermaid
 flowchart LR
@@ -113,13 +111,13 @@ flowchart LR
     I --> J[SHA-256 audit]
 ```
 
-## Data engineering: from a 10M-token slice to a 510M-token corpus
+## Data engineering
 
-The data pipeline was expanded in two stages.
+The data pipeline grew from a small real-data slice into a corpus large enough to support a non-replayed long run.
 
-### Stage 1 — real-data integration
+### Real-data integration: 10M-token corpus
 
-The first real-data pipeline used FineWeb-Edu `sample-10BT` and produced a 10M-token corpus:
+The first FineWeb-Edu pipeline established the full preprocessing path:
 
 | Item | Value |
 |---|---:|
@@ -131,11 +129,11 @@ The first real-data pipeline used FineWeb-Edu `sample-10BT` and produced a 10M-t
 | Train / validation | 9,900,000 / 100,000 |
 | Tokenizer | TinyLlama tokenizer, vocab 32,000, EOS 2 |
 
-This stage established the real-data preprocessing path and later became the underlying slice used by the Day 5 repeated-corpus run.
+This 9.9M-token train slice later became the substrate for the repeated-corpus Day 5 run.
 
-### Stage 2 — non-replayed long-run corpus
+### Non-replayed corpus: 510M total tokens
 
-For Day 6, the pipeline was rebuilt from a 2.15 GB FineWeb-Edu parquet source with the train/validation split performed at document boundaries before packing:
+For Day 6, the pipeline was rebuilt from a ~2.15 GB FineWeb-Edu parquet source. Train/validation separation was performed at document boundaries before packing.
 
 | Item | Value |
 |---|---:|
@@ -147,25 +145,25 @@ For Day 6, the pipeline was rebuilt from a 2.15 GB FineWeb-Edu parquet source wi
 | Total tokens | 510,008,579 |
 | Packed token file | 2,040,034,316 bytes (`int32`) |
 
-The raw parquet was integrity-checked before preprocessing. The packed token stream and metadata were retained with SHA-256 provenance; the raw source file was removed after verification to avoid unnecessary storage use.
+The source parquet was integrity-checked before preprocessing. The packed token stream and metadata were retained with SHA-256 provenance.
 
 ## Scale-up and distributed-path validation
 
-Before the long runs, larger model paths were exercised on the real FineWeb-Edu pipeline.
+Before launching the long runs, the same training stack was exercised at larger model sizes on the real-data pipeline.
 
-| Configuration | Parameters | Steps | Precision | Outcome |
+| Configuration | Parameters | Steps | Precision | Verified path |
 |---|---:|---:|---|---|
-| 336M benchmark | 336,118,784 | 8 | BF16 | forward/backward/update path passed |
-| 653M benchmark | 653,477,120 | 4 | BF16 | larger model path passed |
-| FSDP path | 336,118,784 | 16 | BF16 | init/wrap/forward/backward/optimizer path passed |
+| 336M benchmark | 336,118,784 | 8 | BF16 | forward / backward / update |
+| 653M benchmark | 653,477,120 | 4 | BF16 | larger-model execution path |
+| FSDP path | 336,118,784 | 16 | BF16 | init / wrap / forward / backward / optimizer |
 
-The FSDP run used `world_size=1`; PyTorch therefore operated in `NO_SHARD`. This validates the code path, not multi-GPU sharding or communication.
+The FSDP run used `world_size=1`; PyTorch therefore operated in `NO_SHARD`. It verifies the distributed code path, not multi-GPU sharding or communication.
 
-A scaling report and machine-readable summaries were generated from these runs.
+The scale-up stage also produced machine-readable summaries and a scaling report.
 
-## Long-run pretraining
+## Two 336M long runs
 
-Both formal long runs use the same 336,118,784-parameter architecture and the same 15,259-step / 500,006,912-position budget.
+The formal Day 5 and Day 6 runs use the same 336,118,784-parameter model and the same 15,259-step / 500,006,912-position budget.
 
 | | Day 5 — repeated corpus | Day 6 — non-replayed corpus |
 |---|---:|---:|
@@ -174,41 +172,41 @@ Both formal long runs use the same 336,118,784-parameter architecture and the sa
 | Tokens / optimizer step | 32,768 | 32,768 |
 | Processed token positions | 500,006,912 | 500,006,912 |
 | Underlying train corpus | 9.9M tokens | 505,007,770 tokens |
-| Data regime | slice replayed repeatedly | consumed without dataset replay |
+| Data regime | repeated replay of the small slice | consumed without dataset replay |
 | Precision | BF16 | BF16 |
 | Wall time | ~3 h 31 m | ~3.55 h |
-| Checkpoint | ~4.03 GB | ~4.03 GB |
+| Final checkpoint | ~4.03 GB | ~4.03 GB |
 
-Day 5 averaged **39,424.75 tokens/s**, **77.24% GPU utilization**, and **7.3 GB peak allocated training memory** in its recorded summary. The run completed normally; sampled low-utilization warnings were retained rather than hidden.
+The Day 5 run recorded **39,424.75 tokens/s average throughput**, **77.24% average GPU utilization**, and roughly **7.3 GB peak allocated training memory**. The run completed normally and retained sampled low-utilization warnings rather than filtering them out.
 
-Day 6 first passed a **100-step smoke run**, then completed the formal run. Its best recorded validation loss was **3.14276 at step 15,000**, and the release includes the long-run JSONL trajectory.
+Day 6 first passed a **100-step smoke run**, then completed the full 15,259-step training run. The best recorded validation loss was **3.14276 at step 15,000**.
 
 <p align="center">
   <img src="figures/day6_training_curve.png" width="900" alt="Day 6 non-replayed training curve">
 </p>
 
-## Shared held-out evaluation
+## Day 5 vs. Day 6: one shared held-out exam
 
-The Day 5 and Day 6 checkpoints were frozen and evaluated with the same model-loading and next-token scoring path. Both were at step 15,259 and use the same architecture, tokenizer, vocabulary, EOS ID, and context length.
+The two checkpoints were frozen and scored through the same next-token evaluation path. Both checkpoints were at step 15,259 and use the same architecture, tokenizer, vocabulary, EOS ID, and context length.
 
-### Held-out construction and overlap controls
+### Held-out construction
 
-The shared evaluation set was built from FineWeb-Edu `sample-10BT`, candidate shard `013_00000.parquet`:
+The evaluation set was built from FineWeb-Edu `sample-10BT`, candidate shard `013_00000.parquet`:
 
 - 8,681 candidate rows inspected.
 - 8,666 complete documents retained.
-- 10,000,094 tokens produced before next-token boundary masking.
-- Same cleaning and tokenizer path as the training data.
+- 10,000,094 tokens produced before document-boundary masking.
 - Exact-text deduplication inside the candidate set.
-- 64-token-window SHA-256 screening at stride 16 against the reconstructable Day 5 9.9M-token stream.
+- Same cleaning and tokenizer path used by the training pipeline.
+- 64-token-window SHA-256 screening with stride 16 against the reconstructable Day 5 9.9M-token stream.
 - **15 candidate documents rejected** by the exact token-window screen.
-- Candidate shard differs from the Day 6 training shard (`000_00000.parquet`).
+- Candidate shard separated from the Day 6 training shard (`000_00000.parquet`).
 
-The Day 5 data path did not preserve original shard/URL provenance, so this is intentionally reported as **token-window screening + source-shard separation**, not as proof of semantic or URL-level zero overlap.
+The Day 5 source path did not preserve full shard/URL provenance, so the overlap control is reported exactly as implemented: **token-window screening + source-shard separation**.
 
-### Identical evaluation protocol
+### Identical scoring protocol
 
-For both checkpoints:
+Both checkpoints were evaluated with:
 
 - `model.eval()`
 - `torch.inference_mode()`
@@ -216,9 +214,10 @@ For both checkpoints:
 - no backward pass
 - no optimizer update
 - token-weighted causal cross-entropy
-- identical scoring code and held-out stream
+- identical evaluation code
+- identical held-out stream
 
-The requested 10M-token budget yields **9,992,428 scored tokens** because each complete document loses one unavailable next-token target at its boundary.
+The 10M-token held-out stream yields **9,992,428 scored next-token targets** after document boundaries are respected.
 
 | Checkpoint | Documents | Scored tokens | Weighted NLL | Perplexity |
 |---|---:|---:|---:|---:|
@@ -229,16 +228,16 @@ The requested 10M-token budget yields **9,992,428 scored tokens** because each c
   <img src="figures/shared_heldout_nll.png" width="820" alt="Shared held-out evaluation">
 </p>
 
-A paired bootstrap resampled the same 8,666 document IDs **10,000 times** (seed `1337`) while preserving document token counts:
+The same 8,666 document IDs were then resampled **10,000 times** with a paired bootstrap (`seed=1337`) while preserving document token counts:
 
 - Day 5 − Day 6 weighted NLL: **5.384811**
 - 95% percentile interval: **[5.367100, 5.402861]**
 
-The NLL gap is the primary reported statistic. Perplexity is retained as an auxiliary metric because it is exponential in NLL.
+NLL is the primary statistic in this repository; perplexity is retained as an auxiliary view.
 
-## The large gap was treated as suspicious, not as a conclusion
+## Stress-testing the result
 
-The held-out difference was large enough to justify trying to break the result before trusting it. Day 7 added a read-only sanity-check layer with **no retraining and no weight updates**.
+The shared held-out gap was large enough to warrant a second evaluation layer. Day 7 was run in read-only mode: no retraining and no weight updates.
 
 ### 1. Checkpoint integrity
 Both 336M checkpoints were re-hashed and loaded with `strict=True`.
@@ -248,19 +247,19 @@ Both 336M checkpoints were re-hashed and loaded with `strict=True`.
 - parameter count = 336,118,784 for both
 - both checkpoints at step 15,259
 
-### 2. Configuration equality
-The comparison verified identical:
+### 2. Model/configuration equality
+The comparison matched:
 
 - hidden size `1024`
-- `24` Transformer layers
-- `16` query heads
-- `4` KV heads
+- 24 Transformer layers
+- 16 query heads
+- 4 KV heads
 - context length `512`
 - vocabulary `32,000`
 - EOS ID `2`
 - TinyLlama tokenizer
 
-`day5_day6_model_config_equal = true`.
+Result: `day5_day6_model_config_equal = true`.
 
 ### 3. Random-init baseline
 A randomly initialized model with the same architecture and evaluation path was scored on 500,000 held-out targets:
@@ -268,23 +267,23 @@ A randomly initialized model with the same architecture and evaluation path was 
 - NLL: **10.574821**
 - Perplexity: ~**39,100**
 
-This verifies that the evaluation pipeline is sensitive to model quality rather than returning a nearly fixed score.
+The evaluation path therefore separates an untrained model from both trained checkpoints.
 
 ### 4. Training-side re-evaluation
-The two trained checkpoints were also evaluated back on training-side data:
+Both checkpoints were scored again on training-side data:
 
-| Checkpoint | Training-side NLL | Shared held-out NLL | Interpretation |
-|---|---:|---:|---|
-| **Day 5** | **0.065023** on the full 9.9M-token training slice | **8.424211** | very large train/held-out gap |
-| **Day 6** | **3.049181** on a fixed 10M-token training prefix | **3.039400** | training-subset and held-out scores are close |
+| Checkpoint | Training-side NLL | Shared held-out NLL |
+|---|---:|---:|
+| **Day 5** | **0.065023** on the full 9.9M-token training slice | **8.424211** |
+| **Day 6** | **3.049181** on a fixed 10M-token training prefix | **3.039400** |
 
 <p align="center">
   <img src="figures/memorization_generalization.png" width="820" alt="Memorization vs generalization sanity check">
 </p>
 
-This is the strongest evidence for the **memorization vs. generalization** interpretation inside this experiment. The Day 6 training subset is a fixed prefix, not the complete 505M-token training corpus.
+The Day 5 checkpoint nearly saturates its repeated training slice while performing much worse on held-out text. Day 6 shows almost the same NLL on its fixed training subset and shared held-out data.
 
-### 5. BF16 / FP32 numerical cross-check
+### 5. BF16 / FP32 cross-check
 The first 100,000 scored held-out tokens were re-evaluated in both BF16 and FP32:
 
 | Model | BF16 NLL | FP32 NLL | FP32 − BF16 |
@@ -292,42 +291,40 @@ The first 100,000 scored held-out tokens were re-evaluated in both BF16 and FP32
 | Day 5 | ~8.424 | ~8.424 | −0.0001667 |
 | Day 6 | ~3.039 | ~3.039 | −0.0000198 |
 
-The ordering is unchanged and the numerical differences are tiny, making BF16 evaluation error an implausible explanation for the observed gap.
+The ranking remains unchanged and the precision deltas are tiny.
 
-### 6. Evaluation-chain consistency
-The same shared held-out result was reproduced during the sanity-check stage: Day 5 remained at ~8.424 NLL and Day 6 at ~3.039 NLL.
+### 6. Evaluation consistency
+The shared held-out result was reproduced again during the sanity-check stage: approximately **8.424 vs. 3.039**.
 
-Together, these checks substantially reduce the likelihood that the headline result is explained by a broken checkpoint, mismatched architecture, random baseline artifact, precision issue, or asymmetric evaluation code.
+Taken together, these checks leave a much narrower explanation space for the observed gap: the strongest remaining signal is the contrast between heavy small-corpus repetition and high-coverage non-replayed training.
 
 ## Training stability, fault injection, and recovery
 
-The training engine was also exercised under deliberately abnormal optimization conditions rather than only the nominal configuration.
+The training engine was exercised under deliberately abnormal optimization conditions, not only under the nominal configuration.
 
 ### Normal vs. high-learning-rate stress test
 
-A 30.42M-parameter model was trained for 500 steps under both the normal configuration and an independent high-LR (`3e-3`) stress configuration.
+A 30.42M-parameter model was trained for 500 steps under both the normal setup and an independent high-LR (`3e-3`) stress setup.
 
 | Run | Final loss | Best loss | Max pre-clip grad norm | Validation loss |
 |---|---:|---:|---:|---:|
 | **Normal LR** | **0.015530** | 0.014527 | 15.012 | 0.015689 |
 | **High LR (`3e-3`)** | **0.044620** | 0.042047 | **19.085** | 0.046229 |
 
-The high-LR run remained numerically finite, but converged to a substantially worse loss and produced larger pre-clipping gradient norms.
+The high-LR run stayed numerically finite but converged to a substantially worse loss and produced larger pre-clipping gradient norms.
 
-The observability path records global gradient norm **before** clipping, while the trainer applies `grad_clip=1.0` before the optimizer update. This keeps the diagnostic signal visible without allowing the same magnitude to propagate directly into the parameter update.
+The observability path records the global gradient norm **before** clipping. The trainer then applies `grad_clip=1.0` before the optimizer update, so the diagnostic signal remains visible while the update itself is bounded.
 
 ### Deterministic anomaly injection
 
-A separate anomaly demo exercised the diagnostic path with deliberately abnormal traces and reproducibly triggered:
+A separate anomaly demo was used to exercise the diagnostic layer with deliberately abnormal traces. It reproducibly triggered:
 
 - `loss_spike`
 - `gradient_explosion_risk`
 
-This tests the monitor as a diagnostic system rather than using the monitor itself to modify training.
-
 ### Recovery run
 
-After the stress configuration, a full 500-step recovery run restored the normal learning rate, warmup, and clipping setup:
+After the stress configuration, a full 500-step recovery run restored the normal LR, warmup, and clipping setup:
 
 - final loss: `0.015530`
 - best loss: `0.014527`
@@ -358,23 +355,23 @@ This validates stateful training recovery rather than weight-only loading.
 
 ## Reproducibility and artifact audit
 
-The project keeps machine-readable results alongside narrative reports rather than relying on screenshots or hand-copied numbers.
+The release keeps machine-readable experiment evidence next to the narrative reports.
 
-After the sanity checks, the three source artifacts used in the final comparison were re-hashed directly with **three independent implementations**:
+After the sanity checks, the three artifacts used in the final comparison were hashed directly with three independent implementations:
 
 - `sha256sum`
 - OpenSSL
 - Python `hashlib`
 
-All three implementations agreed on all three files:
+All three agreed on:
 
-- Day 5 checkpoint
-- Day 6 checkpoint
-- shared held-out token stream
+- the Day 5 checkpoint
+- the Day 6 checkpoint
+- the shared held-out token stream
 
-That audit caught two earlier documentation transcription errors: one missing character in the held-out hash and one adjacent-character transposition in the Day 6 checkpoint hash. The patch changed **only the recorded fingerprints and documentation**; weights, training history, metrics, and evaluation outputs were not modified. Pre-patch copies were retained for audit comparison.
+The final audit also caught two transcription errors in earlier documentation: one missing character in the held-out hash and one adjacent-character transposition in the Day 6 checkpoint hash. The canonical manifest was regenerated from the source files and pre-patch copies were retained.
 
-Canonical evidence is kept in:
+Canonical evidence:
 
 - [`results/final_metrics.json`](results/final_metrics.json)
 - [`audit/CANONICAL_HASH_MANIFEST.json`](audit/CANONICAL_HASH_MANIFEST.json)
@@ -383,7 +380,7 @@ Canonical evidence is kept in:
 - [`figures/`](figures/)
 - [`results/pdf/PretrainLab-X_Day8_Technical_Report.pdf`](results/pdf/PretrainLab-X_Day8_Technical_Report.pdf)
 
-The release itself also passed component-level checks for RMSNorm, RoPE, SwiGLU, GQA, full-model forward, and training-observability logic, plus a release audit for required files, JSON validity, hash format, forbidden large artifacts, and obvious secret patterns.
+The release package also passed component-level checks covering RMSNorm, RoPE, SwiGLU, GQA, full-model forward, and training-observability logic, followed by a repository audit for required files, JSON validity, hash format, forbidden large artifacts, and obvious secret patterns.
 
 ## Repository map
 
@@ -404,7 +401,7 @@ tests/          component-level checks
 
 ## Reproduce a smoke run
 
-The public release intentionally excludes raw corpora, packed token arrays, and large model checkpoints. A small smoke configuration can be run with prepared local data:
+The public release excludes raw corpora, packed token arrays, and large checkpoints. A small smoke configuration can be run with prepared local data:
 
 ```bash
 python -m venv .venv
@@ -416,15 +413,17 @@ python train.py --config configs/debug.yaml
 python verify_run.py --run-dir .
 ```
 
-For exact experiment boundaries, data assumptions, and GPU configurations, see [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md).
+See [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) for experiment boundaries, data assumptions, and GPU configurations.
 
 ## Scope
 
-The **336M** configuration is the completed long-run experiment. The **653M** configuration is a short path-validation benchmark, not a completed long run. The FSDP path was exercised with `world_size=1`, so no multi-GPU scaling claim is made. The recorded attention backend is **PyTorch SDPA**, not a third-party `flash-attn` installation.
+- **336M** is the completed long-run configuration.
+- **653M** is a short path-validation benchmark.
+- FSDP was exercised at `world_size=1`; this repository does not report multi-GPU scaling.
+- The recorded attention backend is **PyTorch SDPA**, not a third-party `flash-attn` installation.
+- The Day 5 / Day 6 comparison is best read as a controlled contrast between a heavily replayed small corpus and a high-coverage non-replayed corpus at matched model scale and processed-token budget.
 
-The Day 5 / Day 6 comparison supports a strong memorization/generalization contrast under this experimental setup. It does not establish a universal causal law that non-replayed or “fresh” data is always superior: the checkpoints have different full training histories, and Day 5 did not retain enough original source provenance to prove semantic- or URL-level zero overlap with the held-out set.
-
-See [`LIMITATIONS.md`](LIMITATIONS.md) for the full interpretation boundary.
+Full interpretation boundaries are documented in [`LIMITATIONS.md`](LIMITATIONS.md).
 
 ---
 
